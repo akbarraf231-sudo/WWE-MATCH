@@ -1614,45 +1614,230 @@ html, body {
   padding: 20px;
 }
 
-/* ============================================================ RESPONSIVE */
-@media (max-width: 900px) {
-  :root { --sidebar-w: 56px; }
-
-  .brand-text, .nav-item span:last-child, .sidebar-footer { display: none; }
-
-  .nav-item {
-    justify-content: center;
-    padding: 12px;
-  }
-
-  .nav-icon { font-size: 16px; min-width: auto; }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .dashboard-row, .form-grid-2, .match-slot-grid,
-  .rankings-container, .settings-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .search-input { max-width: 100%; }
+/* ============================================================ RESPONSIVE — TABLET */
+@media (max-width: 1024px) {
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .dashboard-row { grid-template-columns: 1fr; }
+  .rankings-container { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 600px) {
+/* ============================================================ RESPONSIVE — MOBILE DRAWER */
+@media (max-width: 820px) {
+  /* Sidebar becomes off-canvas drawer */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    width: 240px;
+    transform: translateX(-100%);
+    transition: transform 280ms ease;
+    z-index: 200;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.6);
+  }
+
+  #sidebar.open { transform: translateX(0); }
+
+  /* Backdrop */
+  #sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 150;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease;
+    backdrop-filter: blur(2px);
+  }
+
+  #sidebar-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #main-content { width: 100%; }
+
+  #sidebar-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  /* Topbar adjustments */
+  #topbar { padding: 0 14px; height: 52px; }
+  #page-title { font-size: 16px; letter-spacing: 2px; }
+  #current-week {
+    font-size: 9px;
+    padding: 3px 7px;
+    letter-spacing: 1px;
+  }
+  #advance-week-btn {
+    padding: 7px 12px;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* Sections */
   .section { padding: 16px; }
+  .section-header h1 { font-size: 24px; letter-spacing: 3px; }
+  .section-desc { font-size: 10px; letter-spacing: 1px; }
 
-  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  /* Toolbar wraps */
+  .toolbar {
+    gap: 8px;
+  }
+  .toolbar > * { flex: 1 1 auto; min-width: 130px; }
+  .toolbar .btn-primary, .toolbar .btn-secondary { flex: 1 1 100%; }
+  .search-input { max-width: 100%; min-width: 0; }
+  .filter-select { min-width: 0; }
 
-  .stat-number { font-size: 32px; }
+  /* Dashboard */
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-card { padding: 16px 12px; }
+  .stat-number { font-size: 36px; }
+  .stat-label { font-size: 8px; letter-spacing: 2px; }
 
-  .roster-grid { grid-template-columns: 1fr 1fr; }
+  /* Roster cards */
+  .roster-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .superstar-card { padding: 12px; }
+  .sc-name { font-size: 13px; }
+  .sc-archetype { font-size: 11px; }
 
-  #topbar { padding: 0 12px; }
+  /* Factions */
+  .factions-grid { grid-template-columns: 1fr; gap: 12px; }
 
-  .topbar-right { gap: 8px; }
+  /* Storylines */
+  .storylines-grid { grid-template-columns: 1fr; gap: 12px; }
 
-  #advance-week-btn { padding: 6px 12px; font-size: 9px; }
+  /* Forms */
+  .form-grid-2, .match-slot-grid, .segment-slot-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .settings-grid { grid-template-columns: 1fr; gap: 14px; }
+
+  /* Modals — fullscreen on mobile */
+  .modal-overlay { padding: 0; align-items: flex-start; }
+  .modal-box,
+  .modal-box.small,
+  .modal-box.medium,
+  .modal-box.large,
+  .modal-box.xlarge {
+    max-width: 100%;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  .modal-header { padding: 14px 16px; }
+  .modal-header h2 { font-size: 16px; letter-spacing: 2px; }
+  .modal-body { padding: 16px; }
+  .modal-footer { padding: 12px 16px; gap: 8px; }
+  .modal-footer button { flex: 1; }
+
+  /* History table — card layout */
+  .history-table-wrap { border: none; }
+  .history-table { min-width: 0; }
+  .history-table thead { display: none; }
+  .history-table tr {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 10px;
+    padding: 12px;
+  }
+  .history-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    text-align: right;
+  }
+  .history-table td:last-child { border-bottom: none; }
+  .history-table td::before {
+    content: attr(data-label);
+    font-family: var(--font-ui);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--white-faint);
+    text-transform: uppercase;
+    flex: 0 0 90px;
+    text-align: left;
+  }
+
+  /* Episode card body */
+  .ep-header { padding: 12px; flex-wrap: wrap; gap: 6px; }
+  .ep-title-wrap { flex-wrap: wrap; gap: 6px; }
+  .ep-title-text { font-size: 12px; }
+  .ep-header-right span { font-size: 10px; }
+  .ep-match-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .ep-slot-label { min-width: 0; }
+  .ep-match-type { min-width: 0; }
+  .ep-segment-row { flex-direction: column; gap: 6px; }
+  .ep-segment-type { min-width: 0; }
+
+  /* Rankings */
+  .rank-pos { font-size: 22px; min-width: 28px; }
+  .rank-name-big { font-size: 13px; }
+  .rank-momentum-num { font-size: 16px; }
+
+  /* Buttons made touch-friendly */
+  .btn-primary, .btn-secondary, .btn-danger {
+    padding: 11px 16px;
+    font-size: 11px;
+  }
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Inputs taller on mobile */
+  .form-input, .form-textarea, .search-input, .filter-select {
+    padding: 11px 12px;
+    font-size: 15px; /* prevent iOS zoom */
+  }
+}
+
+/* ============================================================ SMALL PHONES */
+@media (max-width: 420px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .roster-grid { grid-template-columns: 1fr; }
+  .stat-number { font-size: 42px; }
+  .stat-card { padding: 18px 14px; }
+  .section-header h1 { font-size: 20px; letter-spacing: 2px; }
+  .feud-vs-row { flex-direction: column; gap: 4px; align-items: flex-start; }
+  .feud-side { text-align: left !important; }
+  .feud-vs-sep { font-size: 11px; }
+  .ep-week-badge { font-size: 11px; }
+  .modal-header h2 { font-size: 14px; }
+  #current-week { display: none; }
+}
+
+/* Default: hide sidebar toggle on desktop */
+#sidebar-toggle { display: none; }
+@media (max-width: 820px) {
+  #sidebar-toggle { display: inline-flex; }
 }
 
 /* ============================================================ MISC */

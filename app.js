@@ -992,13 +992,13 @@ function renderHistory() {
 
   tbody.innerHTML = rows.reverse().map(({ ep, m }) => `
     <tr>
-      <td>${esc(ep.title)}</td>
-      <td>${esc(m.matchType)}</td>
-      <td>${esc(m.participants)}</td>
-      <td class="td-winner">${esc(m.winner || '?')}</td>
-      <td class="td-slot">${esc(m.slot)}</td>
-      <td class="td-interference">${m.interference ? `<span class="interference-tag">⚡ ${esc(m.interference)}</span>` : '—'}</td>
-      <td style="font-size:11px;color:var(--white-faint)">${esc(m.postMatch || '—')}</td>
+      <td data-label="Episode">${esc(ep.title)}</td>
+      <td data-label="Type">${esc(m.matchType)}</td>
+      <td data-label="Participants">${esc(m.participants)}</td>
+      <td data-label="Winner" class="td-winner">${esc(m.winner || '?')}</td>
+      <td data-label="Slot" class="td-slot">${esc(m.slot)}</td>
+      <td data-label="Interference" class="td-interference">${m.interference ? `<span class="interference-tag">⚡ ${esc(m.interference)}</span>` : '—'}</td>
+      <td data-label="Notes" style="font-size:11px;color:var(--white-faint)">${esc(m.postMatch || '—')}</td>
     </tr>`).join('');
 }
 
@@ -1256,9 +1256,25 @@ function bindEvents() {
     });
   });
 
-  // Sidebar toggle
+  // Sidebar drawer toggle (mobile)
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
   document.getElementById('sidebar-toggle').addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('collapsed');
+    sidebar.classList.toggle('open');
+    backdrop.classList.toggle('show');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  });
+  // Close drawer when nav item clicked on mobile
+  document.querySelectorAll('.nav-item').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 820) {
+        sidebar.classList.remove('open');
+        backdrop.classList.remove('show');
+      }
+    });
   });
 
   // Modal close buttons
