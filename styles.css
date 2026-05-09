@@ -38,12 +38,291 @@
 
 html, body {
   height: 100%;
-  background: var(--bg-void);
+  background: #000;
   color: var(--white);
   font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
   overflow: hidden;
+}
+
+/* ============================================================
+   CINEMATIC BACKGROUND SYSTEM — 7 LAYERS
+   "Dangerous wrestling control room during a collapsing era"
+   ============================================================ */
+#bg-system {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* LAYER 1: Deep base — radial industrial darkness */
+.bg-base {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, #1a0a0a 0%, #0a0606 35%, #050202 70%, #000 100%),
+    linear-gradient(180deg, #0c0808 0%, #060303 50%, #020101 100%);
+}
+
+/* LAYER 2: Concrete + metal texture (SVG noise + diagonal grain) */
+.bg-concrete {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' seed='5'/><feColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.05  0 0 0 0 0.05  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    repeating-linear-gradient(135deg, transparent 0 4px, rgba(255,255,255,0.012) 4px 5px),
+    repeating-linear-gradient(45deg, transparent 0 80px, rgba(0,0,0,0.4) 80px 81px);
+  background-size: 400px 400px, auto, auto;
+  opacity: 0.55;
+  mix-blend-mode: overlay;
+}
+
+/* LAYER 3: Volumetric fog drifting slowly */
+.bg-fog {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(140, 30, 30, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 20%, rgba(80, 80, 100, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 50% 100%, rgba(40, 20, 20, 0.25) 0%, transparent 70%);
+  filter: blur(20px);
+  animation: fogDrift 32s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}
+
+.bg-fog-2 {
+  background:
+    radial-gradient(ellipse 40% 30% at 30% 30%, rgba(180, 40, 40, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 70% 70%, rgba(100, 100, 120, 0.05) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: fogDrift2 48s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+@keyframes fogDrift {
+  0%   { transform: translate3d(-3%, 0, 0) scale(1.05); opacity: 0.85; }
+  50%  { transform: translate3d(2%, -1%, 0) scale(1.1); opacity: 1; }
+  100% { transform: translate3d(4%, 1%, 0) scale(1.05); opacity: 0.9; }
+}
+
+@keyframes fogDrift2 {
+  0%   { transform: translate3d(2%, 1%, 0) scale(1.1); }
+  100% { transform: translate3d(-3%, -2%, 0) scale(1.15); }
+}
+
+/* LAYER 4: Red cinematic side lighting (left + right rim) */
+.bg-light-left {
+  background: linear-gradient(90deg,
+    rgba(180, 20, 20, 0.18) 0%,
+    rgba(120, 15, 15, 0.08) 8%,
+    transparent 22%);
+  animation: rimFlickerL 7s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+.bg-light-right {
+  background: linear-gradient(270deg,
+    rgba(120, 15, 15, 0.14) 0%,
+    rgba(80, 10, 10, 0.06) 10%,
+    transparent 25%);
+  animation: rimFlickerR 9s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes rimFlickerL {
+  0%, 100% { opacity: 0.85; }
+  18%      { opacity: 0.55; }
+  22%      { opacity: 0.95; }
+  48%      { opacity: 0.7; }
+  72%      { opacity: 0.9; }
+}
+
+@keyframes rimFlickerR {
+  0%, 100% { opacity: 0.8; }
+  35%      { opacity: 1; }
+  55%      { opacity: 0.6; }
+  78%      { opacity: 0.85; }
+}
+
+/* LAYER 5: Arena spotlight cone from top */
+.bg-spotlight {
+  background:
+    radial-gradient(ellipse 70% 90% at 50% -10%,
+      rgba(255, 220, 200, 0.06) 0%,
+      rgba(180, 50, 50, 0.04) 25%,
+      transparent 60%),
+    conic-gradient(from 90deg at 50% -5%,
+      transparent 0deg,
+      rgba(200, 60, 60, 0.04) 88deg,
+      rgba(255, 200, 180, 0.05) 90deg,
+      rgba(200, 60, 60, 0.04) 92deg,
+      transparent 180deg);
+  mix-blend-mode: screen;
+  animation: spotlightSway 14s ease-in-out infinite alternate;
+}
+
+@keyframes spotlightSway {
+  0%   { transform: translate(-1%, 0) rotate(-0.5deg); opacity: 0.9; }
+  50%  { transform: translate(0.5%, 0) rotate(0.3deg); opacity: 1; }
+  100% { transform: translate(1.5%, 0) rotate(0.6deg); opacity: 0.85; }
+}
+
+/* LAYER 6: LED screen glow pulse (heart of the arena) */
+.bg-led-glow {
+  background: radial-gradient(ellipse 50% 30% at 50% 110%,
+    rgba(220, 30, 30, 0.18) 0%,
+    rgba(140, 15, 15, 0.08) 30%,
+    transparent 60%);
+  filter: blur(8px);
+  animation: ledPulse 4.5s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes ledPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.04); }
+}
+
+/* LAYER 7: Floating dust particles */
+.bg-dust { overflow: hidden; }
+
+.bg-dust span {
+  position: absolute;
+  bottom: -10px;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 200, 180, 0.4);
+  box-shadow: 0 0 4px rgba(255, 180, 160, 0.3);
+  animation: dustFloat linear infinite;
+  opacity: 0;
+}
+
+.bg-dust span:nth-child(1)  { left: 5%;  width: 1px; height: 1px; animation-duration: 28s; animation-delay: 0s;   }
+.bg-dust span:nth-child(2)  { left: 12%; width: 2px; height: 2px; animation-duration: 35s; animation-delay: 4s;   }
+.bg-dust span:nth-child(3)  { left: 18%; width: 1px; height: 1px; animation-duration: 22s; animation-delay: 8s;   }
+.bg-dust span:nth-child(4)  { left: 26%; width: 3px; height: 3px; animation-duration: 40s; animation-delay: 1s;   background: rgba(255, 150, 130, 0.3); }
+.bg-dust span:nth-child(5)  { left: 33%; width: 1px; height: 1px; animation-duration: 30s; animation-delay: 12s;  }
+.bg-dust span:nth-child(6)  { left: 41%; width: 2px; height: 2px; animation-duration: 26s; animation-delay: 5s;   }
+.bg-dust span:nth-child(7)  { left: 48%; width: 1px; height: 1px; animation-duration: 38s; animation-delay: 9s;   }
+.bg-dust span:nth-child(8)  { left: 56%; width: 2px; height: 2px; animation-duration: 32s; animation-delay: 2s;   }
+.bg-dust span:nth-child(9)  { left: 63%; width: 1px; height: 1px; animation-duration: 24s; animation-delay: 14s;  }
+.bg-dust span:nth-child(10) { left: 71%; width: 3px; height: 3px; animation-duration: 42s; animation-delay: 6s;   background: rgba(255, 150, 130, 0.3); }
+.bg-dust span:nth-child(11) { left: 78%; width: 1px; height: 1px; animation-duration: 28s; animation-delay: 11s;  }
+.bg-dust span:nth-child(12) { left: 85%; width: 2px; height: 2px; animation-duration: 34s; animation-delay: 3s;   }
+.bg-dust span:nth-child(13) { left: 91%; width: 1px; height: 1px; animation-duration: 30s; animation-delay: 7s;   }
+.bg-dust span:nth-child(14) { left: 97%; width: 2px; height: 2px; animation-duration: 36s; animation-delay: 10s;  }
+.bg-dust span:nth-child(15) { left: 60%; width: 1px; height: 1px; animation-duration: 26s; animation-delay: 13s;  }
+
+@keyframes dustFloat {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  50%  { transform: translate3d(20px, -45vh, 0); opacity: 0.8; }
+  90%  { opacity: 0.4; }
+  100% { transform: translate3d(-10px, -110vh, 0); opacity: 0; }
+}
+
+/* LAYER 8: Film grain (animated) */
+.bg-grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='8' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.4 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  background-size: 300px 300px;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  animation: grainShift 0.6s steps(4) infinite;
+}
+
+@keyframes grainShift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-3%, 2%); }
+  50%  { transform: translate(2%, -2%); }
+  75%  { transform: translate(-1%, 1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* LAYER 9: Subtle CRT scanlines */
+.bg-scanline {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0.18) 1px,
+    rgba(0,0,0,0) 2px,
+    rgba(0,0,0,0) 4px
+  );
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+}
+
+/* LAYER 10: Rare glitch flash */
+.bg-glitch {
+  background: linear-gradient(180deg,
+    transparent 0%,
+    transparent 49.5%,
+    rgba(255, 50, 50, 0.08) 50%,
+    transparent 50.5%,
+    transparent 100%);
+  background-size: 100% 200%;
+  animation: glitchSweep 17s steps(1) infinite;
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+@keyframes glitchSweep {
+  0%, 96%  { opacity: 0; transform: translateY(0); }
+  96.5%    { opacity: 1; transform: translateY(20%); }
+  97%      { opacity: 0; transform: translateY(40%); }
+  97.5%    { opacity: 0.8; transform: translateY(70%); }
+  98%      { opacity: 0; transform: translateY(80%); }
+  100%     { opacity: 0; }
+}
+
+/* LAYER 11: Heavy cinematic vignette */
+.bg-vignette {
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 50%,
+      transparent 35%,
+      rgba(0,0,0,0.25) 65%,
+      rgba(0,0,0,0.7) 90%,
+      rgba(0,0,0,0.92) 100%);
+  pointer-events: none;
+}
+
+/* Make app sit ABOVE the bg-system but allow transparency */
+#app, body { position: relative; z-index: 1; }
+
+/* Sidebar & topbar get translucent industrial feel */
+#sidebar { background: rgba(8, 8, 8, 0.78); backdrop-filter: blur(8px) saturate(110%); }
+#topbar { background: rgba(10, 10, 10, 0.72); backdrop-filter: blur(8px); }
+
+/* Stat cards & panels feel slightly translucent */
+.stat-card, .dashboard-panel, .superstar-card,
+.faction-card, .feud-card, .episode-card,
+.settings-panel, .ranking-tier, .history-table-wrap {
+  background: rgba(20, 20, 20, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+.match-slot, .segment-slot, .ep-match-row, .ep-segment-row,
+.ranking-row, .champion-item, .ranking-item,
+.champ-setting-item, .ppv-item, .fc-member-tag {
+  background: rgba(22, 22, 22, 0.6);
+}
+
+/* Modal sits over backdrop with stronger background */
+.modal-box { background: rgba(14, 14, 14, 0.95); backdrop-filter: blur(12px); }
+
+/* Reduce motion support */
+@media (prefers-reduced-motion: reduce) {
+  .bg-fog, .bg-fog-2, .bg-light-left, .bg-light-right,
+  .bg-spotlight, .bg-led-glow, .bg-grain, .bg-glitch,
+  .bg-dust span {
+    animation: none;
+  }
 }
 
 /* ============================================================ SCROLLBAR */
