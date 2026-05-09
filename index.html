@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAW RECKONING — WWE Universe Control</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+  <!-- SIDEBAR NAV -->
+  <nav id="sidebar">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div class="brand-text">
+        <span class="brand-name">RAW</span>
+        <span class="brand-sub">RECKONING</span>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" class="nav-item active" data-section="dashboard"><span class="nav-icon">◈</span><span>Dashboard</span></a></li>
+      <li><a href="#" class="nav-item" data-section="roster"><span class="nav-icon">◉</span><span>Roster</span></a></li>
+      <li><a href="#" class="nav-item" data-section="factions"><span class="nav-icon">◆</span><span>Factions & Tags</span></a></li>
+      <li><a href="#" class="nav-item" data-section="episodes"><span class="nav-icon">▶</span><span>Episode Builder</span></a></li>
+      <li><a href="#" class="nav-item" data-section="storylines"><span class="nav-icon">⚔</span><span>Storylines</span></a></li>
+      <li><a href="#" class="nav-item" data-section="history"><span class="nav-icon">◻</span><span>Match History</span></a></li>
+      <li><a href="#" class="nav-item" data-section="rankings"><span class="nav-icon">▲</span><span>Power Rankings</span></a></li>
+      <li><a href="#" class="nav-item" data-section="settings"><span class="nav-icon">⚙</span><span>Universe Settings</span></a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="show-status">
+        <span class="status-dot"></span>
+        <span id="current-show-name">RAW — Season 1</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+    <!-- TOP BAR -->
+    <header id="topbar">
+      <div class="topbar-left">
+        <button id="sidebar-toggle">☰</button>
+        <span id="page-title">DASHBOARD</span>
+      </div>
+      <div class="topbar-right">
+        <span id="current-week">WEEK 1</span>
+        <button class="btn-primary" id="advance-week-btn">ADVANCE WEEK</button>
+      </div>
+    </header>
+
+    <!-- SECTIONS -->
+    <div id="sections-wrapper">
+
+      <!-- ==================== DASHBOARD ==================== -->
+      <section id="section-dashboard" class="section active">
+        <div class="section-header">
+          <h1>UNIVERSE COMMAND CENTER</h1>
+          <p class="section-desc">Full operational control of your WWE Universe</p>
+        </div>
+        <div class="dashboard-grid">
+          <div class="stat-card red-glow" id="stat-roster">
+            <div class="stat-icon">◉</div>
+            <div class="stat-number" id="dash-roster-count">0</div>
+            <div class="stat-label">ACTIVE ROSTER</div>
+          </div>
+          <div class="stat-card" id="stat-storylines">
+            <div class="stat-icon">⚔</div>
+            <div class="stat-number" id="dash-storyline-count">0</div>
+            <div class="stat-label">ACTIVE STORYLINES</div>
+          </div>
+          <div class="stat-card" id="stat-matches">
+            <div class="stat-icon">◻</div>
+            <div class="stat-number" id="dash-match-count">0</div>
+            <div class="stat-label">MATCHES BOOKED</div>
+          </div>
+          <div class="stat-card" id="stat-factions">
+            <div class="stat-icon">◆</div>
+            <div class="stat-number" id="dash-faction-count">0</div>
+            <div class="stat-label">ACTIVE FACTIONS</div>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="dashboard-panel champion-panel">
+            <div class="panel-header"><span class="panel-icon">👑</span> CHAMPIONSHIP OVERVIEW</div>
+            <div id="championship-overview" class="champion-list">
+              <p class="empty-state">No championships configured. Go to Universe Settings.</p>
+            </div>
+          </div>
+          <div class="dashboard-panel">
+            <div class="panel-header"><span class="panel-icon">▲</span> POWER RANKINGS — TOP 5</div>
+            <div id="dash-power-rankings" class="ranking-list">
+              <p class="empty-state">No ranked superstars yet.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-row">
+          <div class="dashboard-panel">
+            <div class="panel-header"><span class="panel-icon">📡</span> UPCOMING MAIN EVENT</div>
+            <div id="dash-main-event" class="main-event-display">
+              <p class="empty-state">No episode scheduled. Build an episode first.</p>
+            </div>
+          </div>
+          <div class="dashboard-panel momentum-panel">
+            <div class="panel-header"><span class="panel-icon">🔥</span> MOMENTUM TRACKER</div>
+            <div id="dash-momentum" class="momentum-list">
+              <p class="empty-state">No momentum data yet.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ROSTER ==================== -->
+      <section id="section-roster" class="section">
+        <div class="section-header">
+          <h1>ROSTER MANAGEMENT</h1>
+          <p class="section-desc">Manage every superstar in your universe</p>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="roster-search" class="search-input" placeholder="Search superstar...">
+          <select id="roster-filter-align" class="filter-select">
+            <option value="">ALL ALIGNMENTS</option>
+            <option value="Face">Face</option>
+            <option value="Heel">Heel</option>
+            <option value="Tweener">Tweener</option>
+          </select>
+          <select id="roster-filter-tier" class="filter-select">
+            <option value="">ALL TIERS</option>
+            <option value="World">World</option>
+            <option value="Upper Midcard">Upper Midcard</option>
+            <option value="Midcard">Midcard</option>
+            <option value="Lower Midcard">Lower Midcard</option>
+            <option value="Enhancement">Enhancement</option>
+          </select>
+          <button class="btn-primary" id="add-superstar-btn">+ ADD SUPERSTAR</button>
+        </div>
+        <div id="roster-grid" class="roster-grid"></div>
+      </section>
+
+      <!-- ==================== FACTIONS ==================== -->
+      <section id="section-factions" class="section">
+        <div class="section-header">
+          <h1>FACTIONS & TAG TEAMS</h1>
+          <p class="section-desc">Build alliances. Forge power.</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn-primary" id="add-faction-btn">+ CREATE FACTION</button>
+          <button class="btn-secondary" id="add-tagteam-btn">+ CREATE TAG TEAM</button>
+        </div>
+        <div class="factions-grid" id="factions-grid"></div>
+      </section>
+
+      <!-- ==================== EPISODES ==================== -->
+      <section id="section-episodes" class="section">
+        <div class="section-header">
+          <h1>EPISODE BUILDER</h1>
+          <p class="section-desc">Book every segment. Control the narrative.</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn-primary" id="create-episode-btn">+ CREATE EPISODE</button>
+        </div>
+        <div id="episodes-list" class="episodes-list"></div>
+      </section>
+
+      <!-- ==================== STORYLINES ==================== -->
+      <section id="section-storylines" class="section">
+        <div class="section-header">
+          <h1>STORYLINE TRACKER</h1>
+          <p class="section-desc">Every feud. Every rivalry. Every war.</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn-primary" id="create-feud-btn">+ CREATE FEUD</button>
+        </div>
+        <div id="storylines-grid" class="storylines-grid"></div>
+      </section>
+
+      <!-- ==================== HISTORY ==================== -->
+      <section id="section-history" class="section">
+        <div class="section-header">
+          <h1>MATCH HISTORY</h1>
+          <p class="section-desc">Every result. Every consequence.</p>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="history-search" class="search-input" placeholder="Filter by superstar...">
+          <select id="history-filter-episode" class="filter-select">
+            <option value="">ALL EPISODES</option>
+          </select>
+        </div>
+        <div id="history-table-wrap" class="history-table-wrap">
+          <table id="history-table" class="history-table">
+            <thead>
+              <tr>
+                <th>EPISODE</th>
+                <th>MATCH TYPE</th>
+                <th>PARTICIPANTS</th>
+                <th>WINNER</th>
+                <th>SLOT</th>
+                <th>INTERFERENCE</th>
+                <th>NOTES</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== RANKINGS ==================== -->
+      <section id="section-rankings" class="section">
+        <div class="section-header">
+          <h1>POWER RANKINGS</h1>
+          <p class="section-desc">Credibility. Momentum. Dominance.</p>
+        </div>
+        <div id="rankings-container" class="rankings-container"></div>
+      </section>
+
+      <!-- ==================== SETTINGS ==================== -->
+      <section id="section-settings" class="section">
+        <div class="section-header">
+          <h1>UNIVERSE SETTINGS</h1>
+          <p class="section-desc">Brand identity. Championships. Season control.</p>
+        </div>
+        <div class="settings-grid">
+          <div class="settings-panel">
+            <h3>BRAND IDENTITY</h3>
+            <div class="form-group">
+              <label>Show Name</label>
+              <input type="text" id="setting-show-name" class="form-input" placeholder="e.g. RAW">
+            </div>
+            <div class="form-group">
+              <label>Season</label>
+              <input type="number" id="setting-season" class="form-input" value="1" min="1">
+            </div>
+            <div class="form-group">
+              <label>Current Week</label>
+              <input type="number" id="setting-week" class="form-input" value="1" min="1">
+            </div>
+            <button class="btn-primary" id="save-brand-btn">SAVE BRAND</button>
+          </div>
+
+          <div class="settings-panel">
+            <h3>CHAMPIONSHIPS</h3>
+            <div id="championships-list" class="championships-list"></div>
+            <button class="btn-secondary" id="add-championship-btn">+ ADD CHAMPIONSHIP</button>
+          </div>
+
+          <div class="settings-panel">
+            <h3>PPV ROADMAP</h3>
+            <div id="ppv-list" class="ppv-list"></div>
+            <button class="btn-secondary" id="add-ppv-btn">+ ADD PPV EVENT</button>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /sections-wrapper -->
+  </main>
+</div><!-- /app -->
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Superstar Modal -->
+<div id="modal-superstar" class="modal-overlay hidden">
+  <div class="modal-box large">
+    <div class="modal-header">
+      <h2 id="superstar-modal-title">ADD SUPERSTAR</h2>
+      <button class="modal-close" data-modal="modal-superstar">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label>Superstar Name *</label>
+          <input type="text" id="ss-name" class="form-input" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Alignment</label>
+          <select id="ss-alignment" class="form-input">
+            <option value="Face">Face</option>
+            <option value="Heel">Heel</option>
+            <option value="Tweener">Tweener</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tier</label>
+          <select id="ss-tier" class="form-input">
+            <option value="World">World</option>
+            <option value="Upper Midcard">Upper Midcard</option>
+            <option value="Midcard">Midcard</option>
+            <option value="Lower Midcard">Lower Midcard</option>
+            <option value="Enhancement">Enhancement</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Archetype / Gimmick</label>
+          <input type="text" id="ss-archetype" class="form-input" placeholder="e.g. Methodical Monster">
+        </div>
+        <div class="form-group">
+          <label>Finisher</label>
+          <input type="text" id="ss-finisher" class="form-input" placeholder="e.g. RKO, Tombstone">
+        </div>
+        <div class="form-group">
+          <label>Push Status</label>
+          <select id="ss-push" class="form-input">
+            <option value="Main Event Push">Main Event Push</option>
+            <option value="Midcard Push">Midcard Push</option>
+            <option value="Rebuilding">Rebuilding</option>
+            <option value="Holding Pattern">Holding Pattern</option>
+            <option value="Jobber">Jobber</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Injury Status</label>
+          <select id="ss-injury" class="form-input">
+            <option value="Active">Active</option>
+            <option value="Injured">Injured</option>
+            <option value="Recovering">Recovering</option>
+            <option value="Suspended">Suspended</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Momentum (0-100)</label>
+          <input type="number" id="ss-momentum" class="form-input" min="0" max="100" value="50">
+        </div>
+        <div class="form-group">
+          <label>Championship Status</label>
+          <input type="text" id="ss-championship" class="form-input" placeholder="e.g. WWE Champion">
+        </div>
+        <div class="form-group">
+          <label>Faction</label>
+          <input type="text" id="ss-faction" class="form-input" placeholder="Faction name or solo">
+        </div>
+      </div>
+      <div class="form-group full-width">
+        <label>Bio</label>
+        <textarea id="ss-bio" class="form-textarea" placeholder="Character bio and backstory..." rows="3"></textarea>
+      </div>
+      <div class="form-group full-width">
+        <label>Entrance Description</label>
+        <textarea id="ss-entrance" class="form-textarea" placeholder="Describe their entrance..." rows="2"></textarea>
+      </div>
+      <div class="form-group full-width">
+        <label>Crowd Reaction</label>
+        <textarea id="ss-crowd" class="form-textarea" placeholder="How does the crowd react?" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-superstar">CANCEL</button>
+      <button class="btn-primary" id="save-superstar-btn">SAVE SUPERSTAR</button>
+    </div>
+    <input type="hidden" id="ss-edit-id">
+  </div>
+</div>
+
+<!-- Superstar Detail Modal -->
+<div id="modal-superstar-detail" class="modal-overlay hidden">
+  <div class="modal-box large">
+    <div class="modal-header">
+      <h2 id="detail-name">SUPERSTAR PROFILE</h2>
+      <button class="modal-close" data-modal="modal-superstar-detail">✕</button>
+    </div>
+    <div class="modal-body" id="detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="detail-edit-btn">EDIT</button>
+      <button class="btn-danger" id="detail-delete-btn">DELETE</button>
+      <button class="btn-secondary" data-modal="modal-superstar-detail">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- Faction Modal -->
+<div id="modal-faction" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="faction-modal-title">CREATE FACTION</h2>
+      <button class="modal-close" data-modal="modal-faction">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Faction Name *</label>
+        <input type="text" id="faction-name" class="form-input" placeholder="e.g. The Shield">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select id="faction-type" class="form-input">
+          <option value="Faction">Faction</option>
+          <option value="Tag Team">Tag Team</option>
+          <option value="Stable">Stable</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Alignment</label>
+        <select id="faction-alignment" class="form-input">
+          <option value="Face">Face</option>
+          <option value="Heel">Heel</option>
+          <option value="Tweener">Tweener</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Philosophy / Ideology</label>
+        <textarea id="faction-philosophy" class="form-textarea" placeholder="What do they stand for?" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Members (comma-separated names)</label>
+        <input type="text" id="faction-members" class="form-input" placeholder="e.g. Roman Reigns, Seth Rollins">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-faction">CANCEL</button>
+      <button class="btn-primary" id="save-faction-btn">SAVE FACTION</button>
+    </div>
+    <input type="hidden" id="faction-edit-id">
+  </div>
+</div>
+
+<!-- Episode Modal -->
+<div id="modal-episode" class="modal-overlay hidden">
+  <div class="modal-box xlarge">
+    <div class="modal-header">
+      <h2 id="episode-modal-title">BUILD EPISODE</h2>
+      <button class="modal-close" data-modal="modal-episode">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label>Episode Title *</label>
+          <input type="text" id="ep-title" class="form-input" placeholder="e.g. RAW Week 1">
+        </div>
+        <div class="form-group">
+          <label>Week Number</label>
+          <input type="number" id="ep-week" class="form-input" value="1" min="1">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="ep-type" class="form-input">
+            <option value="Weekly">Weekly Show</option>
+            <option value="PPV">PPV Event</option>
+            <option value="Special">Special Event</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Theme / Tagline</label>
+          <input type="text" id="ep-theme" class="form-input" placeholder="Episode theme...">
+        </div>
+      </div>
+
+      <!-- MATCH CARD -->
+      <div class="segment-section">
+        <div class="segment-section-header">
+          <h3>MATCH CARD</h3>
+          <button class="btn-secondary small" id="add-match-btn">+ ADD MATCH</button>
+        </div>
+        <div id="match-slots" class="match-slots"></div>
+      </div>
+
+      <!-- SEGMENTS -->
+      <div class="segment-section">
+        <div class="segment-section-header">
+          <h3>SEGMENTS & PROMOS</h3>
+          <button class="btn-secondary small" id="add-segment-btn">+ ADD SEGMENT</button>
+        </div>
+        <div id="segment-slots" class="segment-slots"></div>
+      </div>
+
+      <!-- OVERALL NOTES -->
+      <div class="form-group">
+        <label>Episode Story Notes</label>
+        <textarea id="ep-notes" class="form-textarea" placeholder="Overall story progression and notes..." rows="3"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-episode">CANCEL</button>
+      <button class="btn-primary" id="save-episode-btn">SAVE EPISODE</button>
+    </div>
+    <input type="hidden" id="ep-edit-id">
+  </div>
+</div>
+
+<!-- Feud Modal -->
+<div id="modal-feud" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="feud-modal-title">CREATE FEUD</h2>
+      <button class="modal-close" data-modal="modal-feud">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Feud Title *</label>
+        <input type="text" id="feud-title" class="form-input" placeholder="e.g. The Pursuit of Vengeance">
+      </div>
+      <div class="form-group">
+        <label>Side A (Superstar/Group)</label>
+        <input type="text" id="feud-side-a" class="form-input" placeholder="Name(s) of first party">
+      </div>
+      <div class="form-group">
+        <label>Side B (Superstar/Group)</label>
+        <input type="text" id="feud-side-b" class="form-input" placeholder="Name(s) of second party">
+      </div>
+      <div class="form-group">
+        <label>Heat Level (1-10)</label>
+        <input type="number" id="feud-heat" class="form-input" min="1" max="10" value="5">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="feud-status" class="form-input">
+          <option value="Rising">Rising</option>
+          <option value="Peak">Peak</option>
+          <option value="Cooling Down">Cooling Down</option>
+          <option value="Finished">Finished</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>PPV Payoff Target</label>
+        <input type="text" id="feud-ppv" class="form-input" placeholder="e.g. WrestleMania, SummerSlam">
+      </div>
+      <div class="form-group">
+        <label>Story Notes</label>
+        <textarea id="feud-notes" class="form-textarea" placeholder="Story progression, history, and future plans..." rows="4"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-feud">CANCEL</button>
+      <button class="btn-primary" id="save-feud-btn">SAVE FEUD</button>
+    </div>
+    <input type="hidden" id="feud-edit-id">
+  </div>
+</div>
+
+<!-- Championship Modal -->
+<div id="modal-championship" class="modal-overlay hidden">
+  <div class="modal-box small">
+    <div class="modal-header">
+      <h2>ADD CHAMPIONSHIP</h2>
+      <button class="modal-close" data-modal="modal-championship">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Championship Name *</label>
+        <input type="text" id="champ-name" class="form-input" placeholder="e.g. WWE Championship">
+      </div>
+      <div class="form-group">
+        <label>Current Champion</label>
+        <input type="text" id="champ-holder" class="form-input" placeholder="Name of current champion">
+      </div>
+      <div class="form-group">
+        <label>Reign (weeks)</label>
+        <input type="number" id="champ-reign" class="form-input" value="1" min="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-championship">CANCEL</button>
+      <button class="btn-primary" id="save-championship-btn">SAVE</button>
+    </div>
+    <input type="hidden" id="champ-edit-id">
+  </div>
+</div>
+
+<!-- PPV Modal -->
+<div id="modal-ppv" class="modal-overlay hidden">
+  <div class="modal-box small">
+    <div class="modal-header">
+      <h2>ADD PPV EVENT</h2>
+      <button class="modal-close" data-modal="modal-ppv">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Event Name *</label>
+        <input type="text" id="ppv-name" class="form-input" placeholder="e.g. WrestleMania">
+      </div>
+      <div class="form-group">
+        <label>Scheduled Week</label>
+        <input type="number" id="ppv-week" class="form-input" value="4" min="1">
+      </div>
+      <div class="form-group">
+        <label>Theme / Concept</label>
+        <input type="text" id="ppv-theme" class="form-input" placeholder="Event concept...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" data-modal="modal-ppv">CANCEL</button>
+      <button class="btn-primary" id="save-ppv-btn">SAVE</button>
+    </div>
+    <input type="hidden" id="ppv-edit-id">
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div id="modal-confirm" class="modal-overlay hidden">
+  <div class="modal-box small">
+    <div class="modal-header">
+      <h2 id="confirm-title">CONFIRM ACTION</h2>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-message">Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="confirm-cancel">CANCEL</button>
+      <button class="btn-danger" id="confirm-ok">CONFIRM</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
